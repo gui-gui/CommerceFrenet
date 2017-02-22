@@ -1,0 +1,61 @@
+{% extends "frenet/_layouts/cp" %}
+
+{% set selectedTab = 'carriers' %}
+
+{% set content %}
+        <h2>List of Carriers</h2>
+        <hr>
+        {% if carriers | length %}
+            
+        <table id="carriers" class="data fullwidth collapsible">
+            <thead>
+            <tr>
+                <th scope="col">{{ 'Carrier'|t }}</th>
+                <th scope="col">{{ 'Description'|t }}</th>
+                <th scope="col">{{ 'Handle'|t }}</th>
+                <th scope="col">{{ 'Extra Shipping Days'|t }}</th>
+                <th scope="col">{{ 'Shipping Method'|t }}</th>
+                <td class="thin"></td>
+            </tr>
+            </thead>
+            <tbody>
+                {% for carrier in carriers %}
+                <tr data-id="{{ carrier.id }}" data-name="{{ carrier.name}} {{ carrier.serviceDescription}} {{ carrier.handle }}">
+                    <th>{{ carrier.name }}</th>
+                    <td>{{ carrier.serviceDescription }}</td>
+                    <td>{{ carrier.handle }}</td>
+                    <td>{{ carrier.extraShippingDays }}</td>                
+                    <td>{{ carrier.method.name }}</td>           
+                    <td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}" role="button"></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+            <hr>
+
+            <div class="buttons">
+                <a href="{{ url('frenet/carriers/new') }}" class="btn submit icon">{{ 'Edit Carriers'|t }}</a>
+            </div>
+        {% else %}
+            <p>
+                No carriers were defined yet. <br>
+                Fetch them by clicking the button below. <br>
+                It might take a while to load.
+            </p>
+
+            <hr>
+
+            <div class="buttons">
+                <a href="{{ url('frenet/carriers/new') }}" class="btn submit icon">{{ 'Fetch Carriers'|t }}</a>
+            </div>
+        {% endif %}
+        
+{% endset %}
+
+{% includejs %}
+    new Craft.AdminTable({
+        tableSelector: '#carriers',
+        deleteAction: 'frenet/carriers/delete'
+    });
+
+{% endincludejs %}

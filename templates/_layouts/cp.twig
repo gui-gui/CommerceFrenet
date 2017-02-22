@@ -1,0 +1,8 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Frenet Adapter Plugin"|t %}
+
+{% set tabs = {
+    settings: { label: "Settings"|t, url: url('frenet/settings') },
+    carriers:    { label: "Carriers"|t, url: url('frenet/carriers') }
+} %}

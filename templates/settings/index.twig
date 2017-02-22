@@ -1,0 +1,87 @@
+{% extends "frenet/_layouts/settingscp" %}
+
+{% set selectedTab = 'settings' %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+    <div class="commerceFrenetSettings">
+        <div>
+            <h3>Configurations</h3>
+            
+        <form action="" method="post" accept-charset="UTF-8">
+        <input type="hidden" name="action" value="frenet/settings/saveSettings">
+        <input type="hidden" name="redirect" value="frenet/settings">
+        {{ getCsrfInput() }}
+
+
+            {{ forms.textField({
+                    id:             "token",
+                    name:           "settings[token]",
+                    label:          "Frenet Token"|t,
+                    placeholder:    "paste your token here",
+                    instructions:   "You can find your token at https://painel.frenet.com.br"|t,
+                    value:          settings.token,
+                    errors: settings.getErrors('token'),
+                    required: true           
+            }) }}
+
+            {{ forms.textField({
+                    id:             "apiUrl",
+                    name:           "settings[apiUrl]",
+                    label:          "API Url"|t,
+                    placeholder:    "http://api.frenet.com.br",
+                    instructions:   "For production it will probably be http://api.frenet.com.br"|t,
+                    value:          settings.apiUrl,
+                    errors: settings.getErrors('apiUrl'),
+                    required: true         
+            }) }}
+
+            {{ forms.textField({
+                    id:             "originCep",
+                    name:           "settings[originCep]",
+                    label:          "Origin CEP"|t,
+                    placeholder:    "20000-000",
+                    instructions:   "The CEP code from the address you will be shipping from."|t,
+                    value:          settings.originCep,
+                    errors: settings.getErrors('originCep'),
+                    required: true
+            }) }}
+
+        {% set boxPacker = craft.plugins.getPlugin('boxpacker', true) %}
+        <hr>
+        {% if boxPacker.isEnabled is defined and boxPacker.isEnabled() %}
+            <h4>Integrate with Box Packer Plugin</h4>
+            {{ forms.lightswitch({
+                    onLabel:    "On",
+                    offLabel:   "Off",
+                    name:       "settings[boxPacker]",
+                    on:         settings.boxPacker,
+            }) }}
+
+            <p>Enabling this will generate a better package sorting with the help of Box Packer plugin. <br>If you don't have this enabled, the shipping quote will be based on the sum of dimensions and weight of all line items.</p>
+        {% else %}
+            <h4>Box Packer Plugin is disabled or not installed</h4>
+            <p>Install and enable Box Packer Plugin to get a better package sorting system.</p>
+        {% endif %}
+
+        <hr>
+            <h4>Debugging?</h4>
+
+            {{ forms.lightswitch({
+                    onLabel:    "On",
+                    offLabel:   "Off",
+                    name:       "settings[debug]",
+                    on:         settings.debug,
+            }) }}
+
+            <p>Makes <em>all</em> log messages get logged.</p> 
+            <p>(<code>LogLevel::Warning</code> and <code>LogLevel::Error</code> are always logged).</p>
+            <hr>
+
+        <input type="submit" class="btn submit" value="{{ "Save"|t }}">
+    </form>
+        </div>
+
+
+{% endblock %}
