@@ -29,13 +29,13 @@ class Frenet_ShippingService extends Frenet_BaseService
     return $response;
   }
 
+  // change this to recieve order model only
   public function getQuote($itemTotal, $lineItems = [], $zipCode)
   {
     $postFields =  $this->_generateQuotePostFields($itemTotal, $lineItems, $zipCode);
 
     return $this->_fetchShippingQuote($postFields);
   }
-
 
   private function _fetchShippingQuote($postFields = [])
   {
@@ -100,40 +100,15 @@ class Frenet_ShippingService extends Frenet_BaseService
     return $packedBoxes;
   }
 
-  /*
-  *
-  *  This is a simple packing function that throws every item into
-  *  a single package. This is probably not ideal. But you could
-  *  use box packer plugin to get a better package sorting ;)
-  *
-  */
 
   private function _simplePacking($lineItems)
   {
-    // $width = 0;
-    // $length = 0;
-    // $height = 0;
-    // $weight = 0;
-
-    // foreach ($lineItems as $item)
-    // {
-    //     $width += $item->width * $item->qty;
-    //     $length += $item->length * $item->qty;
-    //     $height += $item->height * $item->qty;
-    //     $weight += $item->weight * $item->qty;
-    // }
-
-    // return [(object) array(
-    //     "reference" => "All items Combined",
-    //     "weight" => $weight,
-    //     "width" => $width,
-    //     "height" => $height,
-    //     "length" => $length
-    // )];
 
     $items = [];
     foreach ($lineItems as $item)
     {
+      for ($x=0; $x < $item->qty; $x++)
+      {
         $items[] = (object) array(
             "reference" => $item->sku,
             "weight" => $item->weight,
@@ -141,8 +116,8 @@ class Frenet_ShippingService extends Frenet_BaseService
             "height" => $item->height,
             "length" => $item->length
         );
+      }
     }
-
     return $items;
   }
 

@@ -3,9 +3,17 @@ namespace Craft;
 
 class FrenetVariable
 {
-	public function __call($name, $arguments)
-	{
-		$className = 'Craft\Frenet_' . ucfirst($name) . 'Variable';
-		return (class_exists($className)) ? new $className() : 'null';
-	}
+
+	public function getAvailableShippingMethods()
+    {
+        $cart = craft()->commerce_cart->getCart();
+        $methods = craft()->commerce_shippingMethods->getOrderedAvailableShippingMethods($cart);
+		
+		$methods['sedex']['amount'] = "10.0000" ;
+
+		return $methods;
+
+	}	
+
+
 }

@@ -52,6 +52,11 @@ class Frenet_CarriersService extends Frenet_BaseService
         $record->extraShippingDays = $model->extraShippingDays;
         $record->methodId = $model->methodId;
 
+        if($record->methodId === null) 
+        {
+            return false;
+        }
+
         $record->validate();
         $model->addErrors($record->getErrors());
         

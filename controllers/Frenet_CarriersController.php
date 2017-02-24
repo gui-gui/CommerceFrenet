@@ -57,7 +57,7 @@ class Frenet_CarriersController extends BaseController
 
             $carrierModel->name = $carrier['name'];
             $carrierModel->handle = $carrier['carrierCode'] . '-' . $carrier['serviceCode'];
-            $carrierModel->methodId = $carrier['methodId'];
+            $carrierModel->methodId = ($carrier['methodId'] ?: null); 
             $carrierModel->serviceDescription = $carrier['serviceDescription'];
             $carrierModel->carrierCode = $carrier['carrierCode'];
             $carrierModel->serviceCode = $carrier['serviceCode'];
@@ -74,7 +74,6 @@ class Frenet_CarriersController extends BaseController
             craft()->userSession->setNotice(Craft::t('Carriers saved.'));
             $this->redirectToPostedUrl($carriers);
         } else {
-            craft::dd($errors);
             craft()->userSession->setError('Couldn’t save these carriers: ' . implode(', ', $errors));
             craft()->urlManager->setRouteVariables(compact('availableCarriers'));
         }
